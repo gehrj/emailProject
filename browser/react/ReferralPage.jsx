@@ -41,11 +41,23 @@ export default class ReferralPage extends React.Component {
         })
     }
     onReferralSubmit(e) {
+        e.preventDefault();
         if (this.state.firstName.length &&
             this.state.lastName.length &&
             validateEmail(this.state.email)
         ) {
             // need make axios call here to add referral, also need to send email and make sure that forign key get add right
+            axios.post('/api/referral', {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                email: this.state.email
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error)
+            })
         }
     }
     render() {
@@ -61,22 +73,25 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="First Name"
                                 data-type="firstName"
+                                onChange={this.handleFirstNameForm}
                             />
                             <label>Last Name</label>
                             <input
                                 className="form-control"
                                 name="Last Name"
                                 data-type="lastName"
+                                onChange={this.handleLastNameForm}
                             />
                             <label>Email</label>
                             <input
                                 className="form-control"
                                 name="Email"
                                 data-type="email"
+                                onChange={this.handleEmailForm}
                             />
                         </div>
                         <div className="form-group col-lg-12 col-md-12">
-                            <button type="submit" className="btn btn-default">
+                            <button type="submit" className="btn btn-default" onClick={this.onReferralSubmit}>
                                 Submit Referral
     	                    </button>
                         </div>
