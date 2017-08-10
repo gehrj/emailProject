@@ -1,16 +1,24 @@
 'use strict'
 
+const nodemailer = require('nodemailer');
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const Referral = models.Referral;
+const User = models.User;
 module.exports = router;
 
 // this is main route and really only one needed for project, it will allow us to add referrals to database on submit later on.
 // First we make a post request which basically means add to database, then we create the referral into the database, we have to use .then because create gives us a promise.
 // Then send a status and the referral to show that it has been created.
 router.post('/', (req, res, next) => {
-    console.log('what is req.body?', req.body);
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'fakeautomechemail@gmail.com',
+            pass: 'fakePassword' 
+        }
+    });
     Referral.create(req.body)
         .then(referral => res.status(201).json(referral))
         .catch(next)

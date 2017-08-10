@@ -23112,6 +23112,10 @@ var ReferralPage = function (_React$Component) {
             firstName: '',
             lastName: '',
             email: '',
+            userId: 0,
+            userFirstName: '',
+            userLastName: '',
+            userEmail: '',
             firstNameDirty: false,
             lastNameDirty: false,
             emailDirty: false
@@ -23119,7 +23123,12 @@ var ReferralPage = function (_React$Component) {
         _this.handleFirstNameForm = _this.handleFirstNameForm.bind(_this);
         _this.handleLastNameForm = _this.handleLastNameForm.bind(_this);
         _this.handleEmailForm = _this.handleEmailForm.bind(_this);
+        _this.handleUserIdForm = _this.handleUserIdForm.bind(_this);
         _this.onReferralSubmit = _this.onReferralSubmit.bind(_this);
+        _this.userFirstName = _this.userFirstName.bind(_this);
+        _this.userLastName = _this.userLastName.bind(_this);
+        _this.userEmail = _this.userEmail.bind(_this);
+        _this.onUserCreate = _this.onUserCreate.bind(_this);
         return _this;
     }
 
@@ -23151,6 +23160,30 @@ var ReferralPage = function (_React$Component) {
             });
         }
     }, {
+        key: 'handleUserIdForm',
+        value: function handleUserIdForm(e) {
+            var userId = parseInt(e.target.value);
+            this.setState({ userId: userId });
+        }
+    }, {
+        key: 'userFirstName',
+        value: function userFirstName(e) {
+            var userFirstName = e.target.value;
+            this.setState({ userFirstName: userFirstName });
+        }
+    }, {
+        key: 'userLastName',
+        value: function userLastName(e) {
+            var userLastName = e.target.value;
+            this.setState({ userLastName: userLastName });
+        }
+    }, {
+        key: 'userEmail',
+        value: function userEmail(e) {
+            var userEmail = e.target.value;
+            this.setState({ userEmail: userEmail });
+        }
+    }, {
         key: 'onReferralSubmit',
         value: function onReferralSubmit(e) {
             e.preventDefault();
@@ -23159,9 +23192,33 @@ var ReferralPage = function (_React$Component) {
                 _axios2.default.post('/api/referral', {
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
-                    email: this.state.email
+                    email: this.state.email,
+                    userId: this.state.userId
                 }).then(function (response) {
                     console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+    }, {
+        key: 'onUserCreate',
+        value: function onUserCreate(e) {
+            var _this2 = this;
+
+            e.preventDefault();
+            if (this.state.userFirstName.length && this.state.userLastName.length && validateEmail(this.state.userEmail)) {
+                _axios2.default.post('/api/user', {
+                    firstName: this.state.userFirstName,
+                    lastName: this.state.userLastName,
+                    email: this.state.userEmail
+                }).then(function (response) {
+                    console.log(response);
+                    _this2.setState({
+                        userFirstName: '',
+                        userLastName: '',
+                        userEmail: ''
+                    });
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -23192,6 +23249,17 @@ var ReferralPage = function (_React$Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'form-group col-lg-12 col-md-12' },
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                'User Id'
+                            ),
+                            _react2.default.createElement('input', {
+                                className: 'form-control',
+                                name: 'User Id',
+                                'data-type': 'userId',
+                                onChange: this.handleUserIdForm
+                            }),
                             _react2.default.createElement(
                                 'label',
                                 null,
@@ -23236,6 +23304,65 @@ var ReferralPage = function (_React$Component) {
                             )
                         )
                     )
+                ),
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    ' This is just to create a fake user to simulate a signed in user '
+                ),
+                _react2.default.createElement(
+                    'form',
+                    { className: 'form-horizontal' },
+                    _react2.default.createElement(
+                        'fieldset',
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group col-lg-12 col-md-12' },
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                'First Name'
+                            ),
+                            _react2.default.createElement('input', {
+                                className: 'form-control',
+                                name: 'First Name',
+                                'data-type': 'firstName',
+                                onChange: this.userFirstName
+                            }),
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                'Last Name'
+                            ),
+                            _react2.default.createElement('input', {
+                                className: 'form-control',
+                                name: 'Last Name',
+                                'data-type': 'lastName',
+                                onChange: this.userLastName
+                            }),
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                'Email'
+                            ),
+                            _react2.default.createElement('input', {
+                                className: 'form-control',
+                                name: 'Email',
+                                'data-type': 'email',
+                                onChange: this.userEmail
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group col-lg-12 col-md-12' },
+                            _react2.default.createElement(
+                                'button',
+                                { type: 'submit', className: 'btn btn-default', onClick: this.onUserCreate },
+                                'Create Fake User'
+                            )
+                        )
+                    )
                 )
             );
         }
@@ -23244,8 +23371,10 @@ var ReferralPage = function (_React$Component) {
     return ReferralPage;
 }(_react2.default.Component);
 
-exports.default = ReferralPage;
+// this helper function uses regex to make sure user is entering valid email syntax
 
+
+exports.default = ReferralPage;
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);

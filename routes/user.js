@@ -21,3 +21,11 @@ router.get('/:userId', (req, res, next) => {
         res.json(user);
     })
 });
+
+// added this just so we could simulate a signed in user, I did not think I need to create a whole oAuth system to demonstrate this project
+// In a real scenerio the user would already be signed in and it would be as simple as fetching their id or email to use as forign key in referral
+router.post('/', (req, res, next) => {
+    User.create(req.body)
+    .then(user => res.status(201).json(user))
+    .catch(next)
+});
