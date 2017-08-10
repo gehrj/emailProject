@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/gehrj/emailProject#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
+    "bootstrap": "^3.3.7",
     "express": "^4.15.4",
+    "jquery": "^3.2.1",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0",
     "pg": "^7.1.0",
