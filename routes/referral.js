@@ -19,6 +19,26 @@ router.post('/', (req, res, next) => {
             pass: 'fakePassword' 
         }
     });
+    User.findById(req.body.userId)
+    .then(user => {
+        if (!user) {
+            const err = Error('user does not exist!');
+            err.status = 404;
+            throw err;
+        }
+        let text = `Hey, ${req.body.firstName} \n\nWelcome to AutoMech where we make taking care of your car easy! You were referred to us by ${user.firstName} ${user.lastName}! \nWe hope to see you soon! \n\nAutoMech`
+
+        let mailOptions = {
+            from: 'fakeautomechemail@gmail.com',
+            to: req.body.email,
+            subject: 'Welcome to AutoMech!',
+            text: text
+        }
+        transporter.sendMail(mailOptions, (error,info) => {
+            if (error) console.log(error);
+            else console.log("Message Sent: " + info.response)
+        })
+    })
     Referral.create(req.body)
         .then(referral => res.status(201).json(referral))
         .catch(next)
