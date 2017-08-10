@@ -1,8 +1,53 @@
 'use strict'
 
 import React from 'react';
+import axios from 'axios';
 
 export default class ReferralPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            firstNameDirty: false,
+            lastNameDirty: false,
+            emailDirty: false
+        }
+        this.handleFirstNameForm = this.handleFirstNameForm.bind(this);
+        this.handleLastNameForm = this.handleLastNameForm.bind(this);
+        this.handleEmailForm = this.handleEmailForm.bind(this);
+        this.onReferralSubmit = this.onReferralSubmit.bind(this);
+    }
+    handleFirstNameForm(e) {
+        const firstName = e.target.value
+        this.setState({
+            firstName,
+            firstNameDirty: true
+        })
+    }
+    handleLastNameForm(e) {
+        const lastName = e.target.value
+        this.setState({
+            lastName,
+            lastNameDirty: true
+        })
+    }
+    handleEmailForm(e) {
+        const email = e.target.value
+        this.setState({
+            email,
+            emailDirty: true
+        })
+    }
+    onReferralSubmit(e) {
+        if (this.state.firstName.length &&
+            this.state.lastName.length &&
+            validateEmail(this.state.email)
+        ) {
+            // need make axios call here to add referral, also need to send email and make sure that forign key get add right
+        }
+    }
     render() {
         return (
             <div className="Referral page container">
@@ -41,3 +86,7 @@ export default class ReferralPage extends React.Component {
         )
     }
 }
+   function validateEmail(email) {
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
