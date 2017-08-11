@@ -23118,7 +23118,8 @@ var ReferralPage = function (_React$Component) {
             userEmail: '',
             firstNameDirty: false,
             lastNameDirty: false,
-            emailDirty: false
+            emailDirty: false,
+            submitted: false
         };
         _this.handleFirstNameForm = _this.handleFirstNameForm.bind(_this);
         _this.handleLastNameForm = _this.handleLastNameForm.bind(_this);
@@ -23205,9 +23206,9 @@ var ReferralPage = function (_React$Component) {
                         userId: 0,
                         firstNameDirty: false,
                         lastNameDirty: false,
-                        emailDirty: false
+                        emailDirty: false,
+                        submitted: true
                     });
-                    _this2.forceUpdate();
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -23342,6 +23343,11 @@ var ReferralPage = function (_React$Component) {
                                     disabled: warning || !firstName || !lastName || !email || !this.state.userId,
                                     onClick: this.onReferralSubmit },
                                 'Submit Referral'
+                            ),
+                            this.state.submitted && _react2.default.createElement(
+                                'span',
+                                null,
+                                ' Thank you for Submitting a referral! Feel free to leave more!'
                             )
                         )
                     )

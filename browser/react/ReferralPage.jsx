@@ -16,7 +16,8 @@ export default class ReferralPage extends React.Component {
             userEmail: '',
             firstNameDirty: false,
             lastNameDirty: false,
-            emailDirty: false
+            emailDirty: false,
+            submitted: false,
         }
         this.handleFirstNameForm = this.handleFirstNameForm.bind(this);
         this.handleLastNameForm = this.handleLastNameForm.bind(this);
@@ -87,9 +88,9 @@ export default class ReferralPage extends React.Component {
                         userId: 0,
                         firstNameDirty: false,
                         lastNameDirty: false,
-                        emailDirty: false
+                        emailDirty: false,
+                        submitted: true
                     })
-                    this.forceUpdate();
                 })
                 .catch(error => {
                     console.log(error)
@@ -186,6 +187,7 @@ export default class ReferralPage extends React.Component {
                                 onClick={this.onReferralSubmit}>
                                 Submit Referral
     	                    </button>
+                            {this.state.submitted && <span> Thank you for Submitting a referral! Feel free to leave more!</span>}
                         </div>
                     </fieldset>
                 </form>
