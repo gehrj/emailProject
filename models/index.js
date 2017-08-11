@@ -3,7 +3,16 @@
 // would normally make each model in the database its own module but since this project is so small I decided to just put it all in the index.js file
 
 const Sequelize = require('sequelize');
-let db = new Sequelize('postgres://localhost:5432/AutoMech', {
+  if (process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+    // the application is executed on Heroku ... use the postgres database
+    sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_BRONZE_URL, {
+      dialect:  'postgres',
+      protocol: 'postgres',
+      port:     match[4],
+      host:     match[3],
+      logging:  true //false
+    })
+let db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/AutoMech', {
     logging: false
 });
 
