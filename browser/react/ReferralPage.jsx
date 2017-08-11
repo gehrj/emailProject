@@ -80,6 +80,16 @@ export default class ReferralPage extends React.Component {
             })
                 .then(response => {
                     console.log(response);
+                    this.setState({
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        userId: 0,
+                        firstNameDirty: false,
+                        lastNameDirty: false,
+                        emailDirty: false
+                    })
+                    this.forceUpdate();
                 })
                 .catch(error => {
                     console.log(error)
@@ -111,18 +121,36 @@ export default class ReferralPage extends React.Component {
         }
     }
     render() {
+        // creating a bunch of variables so I don't have to keep repeating myself
+        let firstName = this.state.firstName;
+        let lastName = this.state.lastName;
+        let email = validateEmail(this.state.email);
+        let warning = '';
+        let dirty = this.state.firstNameDirty && this.state.lastNameDirty && this.state.emailDirty;
+        // logic that will check for form validation, dirty is checking that the field has been touched. Did not include form validation for userID or createUser because in normal scenerio those would not be part of this application.
+        // however lack of putting in a userID will cause a bad submission so I made sure to disable button without it although as is it is easy to write wrong userId
+        if (!firstName && email && lastName && dirty) warning = 'Please enter a first name';
+        if (firstName && !email && lastName && dirty) warning = 'Please enter a valid email';
+        if (firstName && email && !lastName && dirty) warning = 'Please enter a last name';
+        if (!firstName && !email && lastName && dirty) warning = 'Please enter a first name and a valid email';
+        if (!firstName && email && !lastName && dirty) warning = 'Please enter a first and last name';
+        if (firstName && !email && !lastName && dirty) warning = 'Please enter a last name and a valid email';
+        if (!firstName && !email && !lastName && dirty) warning = 'Please enter a first name, last name, and a valid email';
+
         return (
             <div className="Referral page container">
                 <h2>Like your service? Refer us to your friends!</h2>
                 <h2>Leave their information below and we will handle the rest</h2>
                 <form className="form-horizontal">
                     <fieldset>
-                        <div className="form-group col-lg-12 col-md-12">
+                        { warning && <div className="alert alert-warning">{warning}</div> }
+                        <div id='referralForm' className="form-group col-lg-12 col-md-12">
                             <label>User Id</label>
                             <input
                                 className="form-control"
                                 name="User Id"
                                 data-type="userId"
+                                value={this.state.userId || ''}
                                 onChange={this.handleUserIdForm}
                             />
                             <label>First Name</label>
@@ -130,6 +158,7 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="First Name"
                                 data-type="firstName"
+                                value={firstName}
                                 onChange={this.handleFirstNameForm}
                             />
                             <label>Last Name</label>
@@ -137,6 +166,7 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="Last Name"
                                 data-type="lastName"
+                                value={lastName}
                                 onChange={this.handleLastNameForm}
                             />
                             <label>Email</label>
@@ -144,11 +174,16 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="Email"
                                 data-type="email"
+                                value={this.state.email}
                                 onChange={this.handleEmailForm}
                             />
                         </div>
                         <div className="form-group col-lg-12 col-md-12">
-                            <button type="submit" className="btn btn-default" onClick={this.onReferralSubmit}>
+                            <button
+                                type="submit"
+                                className="btn btn-default"
+                                disabled={ warning || !firstName || !lastName || !email || !this.state.userId }
+                                onClick={this.onReferralSubmit}>
                                 Submit Referral
     	                    </button>
                         </div>
@@ -163,6 +198,7 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="First Name"
                                 data-type="firstName"
+                                value={this.state.userFirstName}
                                 onChange={this.userFirstName}
                             />
                             <label>Last Name</label>
@@ -170,6 +206,7 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="Last Name"
                                 data-type="lastName"
+                                value={this.state.userLastName}
                                 onChange={this.userLastName}
                             />
                             <label>Email</label>
@@ -177,6 +214,7 @@ export default class ReferralPage extends React.Component {
                                 className="form-control"
                                 name="Email"
                                 data-type="email"
+                                value={this.state.userEmail}
                                 onChange={this.userEmail}
                             />
                         </div>

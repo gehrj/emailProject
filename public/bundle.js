@@ -23186,6 +23186,8 @@ var ReferralPage = function (_React$Component) {
     }, {
         key: 'onReferralSubmit',
         value: function onReferralSubmit(e) {
+            var _this2 = this;
+
             e.preventDefault();
             if (this.state.firstName.length && this.state.lastName.length && validateEmail(this.state.email)) {
                 // need make axios call here to add referral, also need to send email and make sure that forign key get add right
@@ -23196,6 +23198,16 @@ var ReferralPage = function (_React$Component) {
                     userId: this.state.userId
                 }).then(function (response) {
                     console.log(response);
+                    _this2.setState({
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        userId: 0,
+                        firstNameDirty: false,
+                        lastNameDirty: false,
+                        emailDirty: false
+                    });
+                    _this2.forceUpdate();
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -23204,7 +23216,7 @@ var ReferralPage = function (_React$Component) {
     }, {
         key: 'onUserCreate',
         value: function onUserCreate(e) {
-            var _this2 = this;
+            var _this3 = this;
 
             e.preventDefault();
             if (this.state.userFirstName.length && this.state.userLastName.length && validateEmail(this.state.userEmail)) {
@@ -23214,7 +23226,7 @@ var ReferralPage = function (_React$Component) {
                     email: this.state.userEmail
                 }).then(function (response) {
                     console.log(response);
-                    _this2.setState({
+                    _this3.setState({
                         userFirstName: '',
                         userLastName: '',
                         userEmail: ''
@@ -23227,6 +23239,22 @@ var ReferralPage = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            // creating a bunch of variables so I don't have to keep repeating myself
+            var firstName = this.state.firstName;
+            var lastName = this.state.lastName;
+            var email = validateEmail(this.state.email);
+            var warning = '';
+            var dirty = this.state.firstNameDirty && this.state.lastNameDirty && this.state.emailDirty;
+            // logic that will check for form validation, dirty is checking that the field has been touched. Did not include form validation for userID or createUser because in normal scenerio those would not be part of this application.
+            // however lack of putting in a userID will cause a bad submission so I made sure to disable button without it although as is it is easy to write wrong userId
+            if (!firstName && email && lastName && dirty) warning = 'Please enter a first name';
+            if (firstName && !email && lastName && dirty) warning = 'Please enter a valid email';
+            if (firstName && email && !lastName && dirty) warning = 'Please enter a last name';
+            if (!firstName && !email && lastName && dirty) warning = 'Please enter a first name and a valid email';
+            if (!firstName && email && !lastName && dirty) warning = 'Please enter a first and last name';
+            if (firstName && !email && !lastName && dirty) warning = 'Please enter a last name and a valid email';
+            if (!firstName && !email && !lastName && dirty) warning = 'Please enter a first name, last name, and a valid email';
+
             return _react2.default.createElement(
                 'div',
                 { className: 'Referral page container' },
@@ -23246,9 +23274,14 @@ var ReferralPage = function (_React$Component) {
                     _react2.default.createElement(
                         'fieldset',
                         null,
+                        warning && _react2.default.createElement(
+                            'div',
+                            { className: 'alert alert-warning' },
+                            warning
+                        ),
                         _react2.default.createElement(
                             'div',
-                            { className: 'form-group col-lg-12 col-md-12' },
+                            { id: 'referralForm', className: 'form-group col-lg-12 col-md-12' },
                             _react2.default.createElement(
                                 'label',
                                 null,
@@ -23258,6 +23291,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'User Id',
                                 'data-type': 'userId',
+                                value: this.state.userId || '',
                                 onChange: this.handleUserIdForm
                             }),
                             _react2.default.createElement(
@@ -23269,6 +23303,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'First Name',
                                 'data-type': 'firstName',
+                                value: firstName,
                                 onChange: this.handleFirstNameForm
                             }),
                             _react2.default.createElement(
@@ -23280,6 +23315,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'Last Name',
                                 'data-type': 'lastName',
+                                value: lastName,
                                 onChange: this.handleLastNameForm
                             }),
                             _react2.default.createElement(
@@ -23291,6 +23327,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'Email',
                                 'data-type': 'email',
+                                value: this.state.email,
                                 onChange: this.handleEmailForm
                             })
                         ),
@@ -23299,7 +23336,11 @@ var ReferralPage = function (_React$Component) {
                             { className: 'form-group col-lg-12 col-md-12' },
                             _react2.default.createElement(
                                 'button',
-                                { type: 'submit', className: 'btn btn-default', onClick: this.onReferralSubmit },
+                                {
+                                    type: 'submit',
+                                    className: 'btn btn-default',
+                                    disabled: warning || !firstName || !lastName || !email || !this.state.userId,
+                                    onClick: this.onReferralSubmit },
                                 'Submit Referral'
                             )
                         )
@@ -23328,6 +23369,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'First Name',
                                 'data-type': 'firstName',
+                                value: this.state.userFirstName,
                                 onChange: this.userFirstName
                             }),
                             _react2.default.createElement(
@@ -23339,6 +23381,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'Last Name',
                                 'data-type': 'lastName',
+                                value: this.state.userLastName,
                                 onChange: this.userLastName
                             }),
                             _react2.default.createElement(
@@ -23350,6 +23393,7 @@ var ReferralPage = function (_React$Component) {
                                 className: 'form-control',
                                 name: 'Email',
                                 'data-type': 'email',
+                                value: this.state.userEmail,
                                 onChange: this.userEmail
                             })
                         ),
