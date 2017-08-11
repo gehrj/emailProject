@@ -12,9 +12,12 @@ const Sequelize = require('sequelize');
       host:     match[3],
       logging:  true //false
     })
+    else {
+
 let db = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost:5432/AutoMech', {
     logging: false
 });
+    }
 
 // define user model here, I'm sure an actual user would have more data in their model but for purpose of project this seems fine
 
