@@ -3,6 +3,7 @@
 import React from 'react';
 import axios from 'axios';
 
+// Using es6 class because it is typical convention for react and it is also more readable
 export default class ReferralPage extends React.Component {
     constructor(props) {
         super(props)

@@ -19,6 +19,7 @@ router.post('/', (req, res, next) => {
             pass: 'fakePassword' 
         }
     });
+    // this query allows us to retrieve the users information to use in sending of email
     User.findById(req.body.userId)
     .then(user => {
         if (!user) {
@@ -26,6 +27,8 @@ router.post('/', (req, res, next) => {
             err.status = 404;
             throw err;
         }
+        // here we create the automated message, then fill in the email data in mailOptions object and then use all of that to send email
+        // with transporter.sendMail()
         let text = `Hey, ${req.body.firstName} \n\nWelcome to AutoMech where we make taking care of your car easy! You were referred to us by ${user.firstName} ${user.lastName}! \nWe hope to see you soon! \n\nAutoMech`
 
         let mailOptions = {

@@ -10443,6 +10443,7 @@ var _ReferralPage2 = _interopRequireDefault(_ReferralPage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// this renders our react component, typically we would have many routes here but for this app it is just the one component
 _reactDom2.default.render(_react2.default.createElement(_ReferralPage2.default, null), document.getElementById('app'));
 
 /***/ }),
@@ -23100,6 +23101,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Using es6 class because it is typical convention for react and it is also more readable
 var ReferralPage = function (_React$Component) {
     _inherits(ReferralPage, _React$Component);
 
