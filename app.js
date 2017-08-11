@@ -28,7 +28,7 @@ app.use('/api', routes);
 // syncing database and starting server
 models.db.sync({force: true})
 .then(function() {
-    app.listen(3000,function() {
+    app.listen(process.env.PORT || 3000, function() {
     console.log('Listening on port 3000!');
     });
 })
