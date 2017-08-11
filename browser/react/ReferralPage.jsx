@@ -19,6 +19,7 @@ export default class ReferralPage extends React.Component {
             emailDirty: false,
             submitted: false,
         }
+        // binding all of the methods so we can retain the correct this value
         this.handleFirstNameForm = this.handleFirstNameForm.bind(this);
         this.handleLastNameForm = this.handleLastNameForm.bind(this);
         this.handleEmailForm = this.handleEmailForm.bind(this);
@@ -29,6 +30,8 @@ export default class ReferralPage extends React.Component {
         this.userEmail = this.userEmail.bind(this);
         this.onUserCreate = this.onUserCreate.bind(this);
     }
+    // creating various methods that read what the user enters and then updates the state
+    // also create two different methods that handle submitting the data and also make axios requests to post to database
     handleFirstNameForm(e) {
         const firstName = e.target.value;
         this.setState({
@@ -72,13 +75,14 @@ export default class ReferralPage extends React.Component {
             this.state.lastName.length &&
             validateEmail(this.state.email)
         ) {
-            // need make axios call here to add referral, also need to send email and make sure that forign key get add right
+            // need make axios call here to add referral
             axios.post('/api/referral', {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
                 email: this.state.email,
                 userId: this.state.userId
             })
+                // clearing state here so forms will empty, also setting submit to true so user knows they succesfully submitted referral
                 .then(response => {
                     console.log(response);
                     this.setState({
@@ -144,6 +148,7 @@ export default class ReferralPage extends React.Component {
                 <h2>Leave their information below and we will handle the rest</h2>
                 <form className="form-horizontal">
                     <fieldset>
+                        {/* Using logic to determine if we should display warning or not, the rest is basic HTML/bootstrap form code */}
                         { warning && <div className="alert alert-warning">{warning}</div> }
                         <div id='referralForm' className="form-group col-lg-12 col-md-12">
                             <label>User Id</label>

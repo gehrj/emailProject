@@ -23120,8 +23120,8 @@ var ReferralPage = function (_React$Component) {
             lastNameDirty: false,
             emailDirty: false,
             submitted: false
-        };
-        _this.handleFirstNameForm = _this.handleFirstNameForm.bind(_this);
+            // binding all of the methods so we can retain the correct this value
+        };_this.handleFirstNameForm = _this.handleFirstNameForm.bind(_this);
         _this.handleLastNameForm = _this.handleLastNameForm.bind(_this);
         _this.handleEmailForm = _this.handleEmailForm.bind(_this);
         _this.handleUserIdForm = _this.handleUserIdForm.bind(_this);
@@ -23132,6 +23132,9 @@ var ReferralPage = function (_React$Component) {
         _this.onUserCreate = _this.onUserCreate.bind(_this);
         return _this;
     }
+    // creating various methods that read what the user enters and then updates the state
+    // also create two different methods that handle submitting the data and also make axios requests to post to database
+
 
     _createClass(ReferralPage, [{
         key: 'handleFirstNameForm',
@@ -23191,13 +23194,15 @@ var ReferralPage = function (_React$Component) {
 
             e.preventDefault();
             if (this.state.firstName.length && this.state.lastName.length && validateEmail(this.state.email)) {
-                // need make axios call here to add referral, also need to send email and make sure that forign key get add right
+                // need make axios call here to add referral
                 _axios2.default.post('/api/referral', {
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: this.state.email,
                     userId: this.state.userId
-                }).then(function (response) {
+                })
+                // clearing state here so forms will empty, also setting submit to true so user knows they succesfully submitted referral
+                .then(function (response) {
                     console.log(response);
                     _this2.setState({
                         firstName: '',
